@@ -118,6 +118,14 @@ Run from the `twitter-bot-detection/` directory so relative data paths resolve c
 
 GPU acceleration is detected automatically. To force CPU execution, set `tree_method='hist'` (XGBoost) and `device='cpu'` (LightGBM/CatBoost) in the respective notebooks.
 
+## Reflection
+
+This was my first structured Kaggle competition. The main lesson was that fraud detection models benefit both from domain understanding (feature engineering gave strong improvements) and from advanced techniques like pseudo-labelling and ensembling. Pseudo-labelling consistently improved CV ROC-AUC by approximately 1.7%, and the meta-ensemble outperformed all individual models.
+
+One mistake was poor planning: I had to combine all my experiment notebooks into one close to the submission date, which was a rush to rerun everything. Better tracking and a clearer pipeline from the start would have helped significantly. I also learned not to over-trust the public leaderboard, since it was only 30% of the test data and the top 50 positions differed by roughly 1% — likely noise.
+
+A full academic report is included as `report.pdf`.
+
 ## Dependencies
 
 Install from `requirements.txt`:

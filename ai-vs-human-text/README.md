@@ -883,3 +883,13 @@ This competition demonstrated the power of:
 **Final Kaggle Ranking**: DeBERTa-v3 (0.99964 ROC-AUC) achieved state-of-the-art performance, with simple ensemble (0.99937) as a close, more robust alternative.
 
 **Key Takeaway**: Modern transformers (DeBERTa, RoBERTa) excel at text classification, but traditional ML + feature engineering remains competitive and interpretable. Ensembling provides the best of both worlds.
+
+## Personal Reflection
+
+This competition was my opportunity to apply lessons from the first one. Experiment tracking was much more rigorous — saving models, metrics, and out-of-fold predictions for each fold made ensembling significantly easier. I discovered 500 duplicate samples (all human class) late in the process, which meant most experiments were run on the original dataset while only the final models were retrained on deduplicated data. In hindsight, group stratified k-fold from the start would have been the better approach.
+
+A few specific findings stood out. Local patterns worked better than expected: unigram TF-IDF outperformed higher n-gram ranges for logistic regression, and CharCNN (character-level) beat BiLSTM (word-level), suggesting that fine-grained local features were more discriminative than long-range context for this task. DeBERTa outperformed RoBERTa, likely because its disentangled attention mechanism separates positional from content-based attention — and content-based attention appears more important here.
+
+I also learned to trust cross-validation over the public leaderboard. The leaderboard was only 30% of ~1,300 test samples, while CV used ~1,000 validation samples per fold. A small leaderboard is susceptible to noise, whereas rigorous CV with consistent folds gives a more reliable signal.
+
+A full academic report is included as `report.pdf`.
