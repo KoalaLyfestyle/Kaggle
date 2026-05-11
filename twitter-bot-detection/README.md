@@ -79,7 +79,7 @@ Each base model was trained with 5-fold stratified cross-validation. Hyperparame
 ## Repository Structure
 
 ```
-Competition 1/
+twitter-bot-detection/
 ├── data/
 │   ├── train.csv
 │   ├── test.csv
@@ -109,7 +109,7 @@ Competition 1/
 
 ## Running the Notebooks
 
-Run from the `Competition 1/` directory so relative data paths resolve correctly.
+Run from the `twitter-bot-detection/` directory so relative data paths resolve correctly.
 
 1. Start with `EDA.ipynb` to understand the data
 2. Run any individual model notebook — each is self-contained and uses `helpers/` for preprocessing

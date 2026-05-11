@@ -802,7 +802,7 @@ for fold, (train_idx, val_idx) in enumerate(skf.split(X, y)):
 ### File Structure
 
 ```
-Competition 2/
+ai-vs-human-text/
 ├── README.md                          # This file
 ├── EDA.ipynb                          # Exploratory data analysis
 ├── Processing.ipynb                   # Feature engineering pipeline

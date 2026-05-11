@@ -84,7 +84,7 @@ New analysis sections compare:
 Ensure your directory structure looks like this:
 
 ```
-Competition 2/
+ai-vs-human-text/
 ├── experiments/              # Deduplicated data models
 │   ├── exp_1_tfidf_log/
 │   │   ├── metrics.json
