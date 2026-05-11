@@ -1,0 +1,3 @@
+data_version,kaggle_roc_auc_count,kaggle_roc_auc_mean,kaggle_roc_auc_std,kaggle_roc_auc_min,kaggle_roc_auc_max,cv_roc_auc_mean,cv_roc_auc_std,cv_roc_auc_min,cv_roc_auc_max,generalization_gap_mean,generalization_gap_std
+deduplicated,1,0.99952,,0.99952,0.99952,0.998762,,0.998762,0.998762,-0.000758,
+original,11,0.994486,0.005952,0.97949,0.99964,0.99262,0.006727,0.976765,0.999398,-0.001422,0.004089

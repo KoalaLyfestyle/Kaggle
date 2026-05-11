@@ -1,0 +1,11 @@
+model_id,data_version,model_type,kaggle_roc_auc,cv_roc_auc,generalization_gap
+DeBERTa [original],original,DeBERTa-v3,0.99964,0.9993975395986165,-0.0002424604013834264
+DeBERTa [deduplicated],deduplicated,DeBERTa-v3,0.99952,0.998761673291311,-0.0007583267086889167
+Stacked Ensemble [original],original,Stacked Ensemble (Logistic Regression Meta-Learner),0.99893,,
+Hybrid CharCNN+MLP [original],original,Hybrid CharCNN + MLP (Keras),0.99886,0.9948315805571692,-0.004028419442830722
+All MLP (Optuna) [original],original,MLP (Multi-Layer Perceptron),0.9985,0.9962407421084641,-0.002259257891535915
+All XGBoost (Optuna) [original],original,XGBoost,0.99736,0.9951144707590487,-0.0022455292409513383
+All Features + MLP [original],original,MLP (Multi-Layer Perceptron),0.99685,0.9962407421084641,-0.0006092578915358748
+CharCNN [original],original,CharCNN (Keras),0.9952,0.9847695465153322,-0.010430453484667757
+Hybrid BiLSTM+MLP [original],original,Hybrid BiLSTM + MLP (Keras),0.9932,0.9955529003810417,0.002352900381041745
+BiLSTM [original],original,BiLSTM (Keras),0.99178,0.9932872795963499,0.0015072795963498864

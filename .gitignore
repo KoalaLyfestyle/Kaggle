@@ -146,6 +146,11 @@ evaluation_results/
 optuna_studies/
 copilot-artefacts/
 data/pseudo_train.csv
+experiments/
+experiments_old/
+*_w_struct.csv
+oof_predictions.csv
+E1121498.ipynb
 
 # Data files (usually large and provided by Kaggle)
 # Uncomment the following lines if you don't want to track data files

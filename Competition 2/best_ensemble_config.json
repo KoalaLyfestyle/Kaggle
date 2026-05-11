@@ -1,0 +1,73 @@
+{
+  "experiment_name": "optimized_weighted_ensemble",
+  "timestamp": "2025-11-09 12:07:29",
+  "optimization_metric": "roc_auc",
+  "model_columns": [
+    "hybrid_charcnn_mlp",
+    "xgboost_optuna",
+    "ridge",
+    "deberta"
+  ],
+  "optimal_weights": {
+    "hybrid_charcnn_mlp": 0.25,
+    "xgboost_optuna": 0.25,
+    "ridge": 0.25,
+    "deberta": 0.25
+  },
+  "metrics": {
+    "accuracy": 0.98338081671415,
+    "precision": 0.9763353617308993,
+    "recall": 0.9763353617308993,
+    "f1": 0.9763353617308993,
+    "roc_auc": 0.998393164752937,
+    "log_loss": 0.12497528079599045,
+    "mcc": 0.9635289219211663,
+    "specificity": 0.9871935601902672
+  },
+  "individual_model_metrics": [
+    {
+      "accuracy": 0.9845679012345679,
+      "precision": 0.966358839050132,
+      "recall": 0.9905341446923597,
+      "f1": 0.9782971619365609,
+      "roc_auc": 0.9986822466599722,
+      "log_loss": 0.07115118679660623,
+      "mcc": 0.9665048190385418,
+      "specificity": 0.9813391877058177,
+      "model": "deberta"
+    },
+    {
+      "accuracy": 0.9700854700854701,
+      "precision": 0.976073187895848,
+      "recall": 0.9377958079783637,
+      "f1": 0.956551724137931,
+      "roc_auc": 0.9965119676445973,
+      "log_loss": 0.40075372789212316,
+      "mcc": 0.9341905002124931,
+      "specificity": 0.9875594584705452,
+      "model": "ridge"
+    },
+    {
+      "accuracy": 0.9677113010446344,
+      "precision": 0.9546377792823291,
+      "recall": 0.9533468559837728,
+      "f1": 0.9539918809201624,
+      "roc_auc": 0.9954484134140932,
+      "log_loss": 0.08262748622356157,
+      "mcc": 0.9291204207635729,
+      "specificity": 0.9754848152213684,
+      "model": "hybrid_charcnn_mlp"
+    },
+    {
+      "accuracy": 0.9624881291547959,
+      "precision": 0.9583622484385843,
+      "recall": 0.933739012846518,
+      "f1": 0.9458904109589041,
+      "roc_auc": 0.9927428937432878,
+      "log_loss": 0.10557451096186865,
+      "mcc": 0.9173734101414908,
+      "specificity": 0.9780461031833151,
+      "model": "xgboost_optuna"
+    }
+  ]
+}

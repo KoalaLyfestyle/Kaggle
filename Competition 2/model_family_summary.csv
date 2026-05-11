@@ -1,0 +1,8 @@
+family,kaggle_roc_auc_count,kaggle_roc_auc_mean,kaggle_roc_auc_std,kaggle_roc_auc_max,cv_roc_auc_mean,cv_roc_auc_std,generalization_gap_mean,generalization_gap_std
+Deep Learning (LSTM/CNN),2,0.99349,0.002418,0.9952,0.989028,0.006023,-0.004462,0.008441
+Ensemble,1,0.99893,,0.99893,,,,
+Gradient Boosting,2,0.988425,0.012636,0.99736,0.98594,0.012975,-0.002485,0.000339
+Hybrid (DL + Features),2,0.99603,0.004002,0.99886,0.995192,0.00051,-0.000838,0.004512
+Linear Models,1,0.98954,,0.98954,0.993998,,0.004458,
+Neural Network (MLP),2,0.997675,0.001167,0.9985,0.996241,0.0,-0.001434,0.001167
+Transformer (BERT),2,0.99958,8.5e-05,0.99964,0.99908,0.00045,-0.0005,0.000365
