@@ -136,6 +136,16 @@ dmypy.json
 *.hdf5
 *.model
 *.bin
+*.keras
+
+# Training artifacts & generated outputs
+catboost_info/
+models_final/
+submissions_final/
+evaluation_results/
+optuna_studies/
+copilot-artefacts/
+data/pseudo_train.csv
 
 # Data files (usually large and provided by Kaggle)
 # Uncomment the following lines if you don't want to track data files

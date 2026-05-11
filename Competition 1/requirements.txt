@@ -1,0 +1,26 @@
+# Core Data Science Libraries
+pandas
+numpy
+matplotlib
+seaborn
+scipy
+
+# Machine Learning - Scikit-learn
+scikit-learn
+
+# Hyperparameter Optimization
+optuna
+
+# Gradient Boosting Libraries
+catboost
+lightgbm
+xgboost
+
+# Deep Learning
+tensorflow
+
+# Utilities
+joblib
+
+# GPU Monitoring (optional, for GPU acceleration)
+# gputil

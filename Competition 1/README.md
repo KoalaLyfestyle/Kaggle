@@ -55,12 +55,19 @@ Each base model was trained with 5-fold stratified cross-validation. Hyperparame
 | `LightGBM+NLP.ipynb` | LightGBM with NLP features |
 | `CatBoost.ipynb` | CatBoost baseline + Optuna tuning |
 | `CatBoost+NLP.ipynb` | CatBoost with NLP features |
+| `NN_STRUCT_MLP.ipynb` | Neural network on structured features only |
+| `NN_Text_MLP.ipynb` | Neural network on text features only |
+| `NN_ALL_MLP.ipynb` | Neural network combining all features |
 
 ### 4. Ensembling
 
-**Weighted Ensemble** (`weighted_ensemble.ipynb`): Combines Optuna-tuned XGBoost, LightGBM, and CatBoost predictions. Ensemble weights are optimised with Optuna over 100 trials. XGBoost dominates the optimal weights (~0.997 normalised).
+**Weighted Ensemble** (`weighted_ensemble.ipynb`): Combines Optuna-tuned XGBoost, LightGBM, and CatBoost predictions. Ensemble weights are optimised with Optuna over 100 trials.
 
 **Meta-Ensemble + Pseudo-Labeling** (`meta_ensemble.ipynb`): Stacks base model out-of-fold predictions as features for a Logistic Regression meta-learner. Optionally extends training with high-confidence test pseudo-labels.
+
+### 5. Evaluation
+
+**Cross-Model Analysis** (`Eval.ipynb`): Loads all trained models and Optuna studies to compare performance, analyze feature importances, and visualize optimization history.
 
 ### Results
 
@@ -89,10 +96,15 @@ Competition 1/
 │   ├── LightGBM+NLP.ipynb
 │   ├── CatBoost.ipynb
 │   ├── CatBoost+NLP.ipynb
+│   ├── NN_STRUCT_MLP.ipynb
+│   ├── NN_Text_MLP.ipynb
+│   ├── NN_ALL_MLP.ipynb
 │   ├── weighted_ensemble.ipynb
 │   └── meta_ensemble.ipynb
 ├── submissions/               # Generated CSV files for Kaggle submission
-└── EDA.ipynb
+├── EDA.ipynb
+├── Eval.ipynb
+└── requirements.txt
 ```
 
 ## Running the Notebooks
@@ -100,15 +112,18 @@ Competition 1/
 Run from the `Competition 1/` directory so relative data paths resolve correctly.
 
 1. Start with `EDA.ipynb` to understand the data
-2. Run any individual model notebook (e.g. `XGBoost.ipynb`) — these save Optuna studies to `models/trained/`
-3. Run `weighted_ensemble.ipynb` or `meta_ensemble.ipynb` after training all three base models
+2. Run any individual model notebook — each is self-contained and uses `helpers/` for preprocessing
+3. Run `weighted_ensemble.ipynb` or `meta_ensemble.ipynb` after training base models
+4. Run `Eval.ipynb` to compare all trained models
 
 GPU acceleration is detected automatically. To force CPU execution, set `tree_method='hist'` (XGBoost) and `device='cpu'` (LightGBM/CatBoost) in the respective notebooks.
 
 ## Dependencies
 
-```
-pandas numpy scikit-learn xgboost lightgbm catboost optuna
+Install from `requirements.txt`:
+
+```bash
+pip install -r requirements.txt
 ```
 
 Optional for GPU NLP: `cupy cuml`
