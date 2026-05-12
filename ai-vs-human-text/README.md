@@ -870,20 +870,6 @@ ai-vs-human-text/
 
 ---
 
-## Conclusion
-
-This competition demonstrated the power of:
-
-1. **Systematic experimentation** with consistent CV methodology
-2. **Feature engineering** complementing deep learning
-3. **Progressive complexity** from baselines to state-of-the-art transformers
-4. **Ensemble methods** for reliable performance gains
-5. **Rigorous tracking** enabling reproducibility and analysis
-
-**Final Kaggle Ranking**: 32nd of 113 participants (private score 0.99943). DeBERTa-v3 was the best single model, though the public leaderboard score (0.99964) was higher than the private.
-
-**Key Takeaway**: Modern transformers (DeBERTa, RoBERTa) excel at text classification, but traditional ML + feature engineering remains competitive and interpretable. Ensembling provides the best of both worlds.
-
 ## Results
 
 **Competition**: BT4012 In-class Kaggle Competition 2 [2025]
@@ -892,17 +878,23 @@ This competition demonstrated the power of:
 - **Evaluation**: Final ranking based on private leaderboard (70% of test data)
 - **My result**: 32nd place (private), dropped 13 places from public
 - **Selected submission**: 0.99943 (deduplicated DeBERTa)
-- **Best model (not selected)**: non-deduped DeBERTa at 0.99944 — one rank higher
+- **Best model (not selected)**: non-deduped DeBERTa at 0.99944 (one rank higher)
 - **Gap left on table**: 0.00001
 
-Compared to Competition 1, the drop from public to private was much smaller (13 places vs 53), and the gap between my selected model and best model shrank from 0.00139 to 0.00001. This shows the direct impact of better experiment tracking and model selection discipline. The public leaderboard was only 30% of the test data — trusting CV over public scores was the right call, even if I still left a tiny bit on the table.
+The public-to-private drop shrank from 53 places in Competition 1 to 13 here, and the model selection gap fell from 0.00139 to 0.00001. Better experiment tracking and more disciplined model selection directly caused that improvement. The public leaderboard was only 30% of the test data, so relying on CV instead of public scores was the right approach.
 
-## Personal Reflection
+A few findings from the experiments:
+- Local patterns were more discriminative than expected: unigram TF-IDF beat higher n-gram ranges, and CharCNN (character-level) beat BiLSTM (word-level)
+- DeBERTa outperformed RoBERTa, probably because its disentangled attention separates positional from content-based attention, and content-based attention mattered more for this task
+- The best single model (DeBERTa) outperformed all ensembles on the private set
+- Modern transformers excel at text classification, but traditional ML plus feature engineering still works and is more interpretable
 
-This competition was my opportunity to apply lessons from the first one. Experiment tracking was much more rigorous — saving models, metrics, and out-of-fold predictions for each fold made ensembling significantly easier. I discovered 500 duplicate samples (all human class) late in the process, which meant most experiments were run on the original dataset while only the final models were retrained on deduplicated data. In hindsight, group stratified k-fold from the start would have been the better approach.
+## Reflection
 
-A few specific findings stood out. Local patterns worked better than expected: unigram TF-IDF outperformed higher n-gram ranges for logistic regression, and CharCNN (character-level) beat BiLSTM (word-level), suggesting that fine-grained local features were more discriminative than long-range context for this task. DeBERTa outperformed RoBERTa, likely because its disentangled attention mechanism separates positional from content-based attention — and content-based attention appears more important here.
+I applied what I learned from Competition 1. Experiment tracking was much more rigorous. Saving models, metrics, and out-of-fold predictions for each fold made ensembling significantly easier.
 
-I also learned to trust cross-validation over the public leaderboard. The leaderboard was only 30% of ~1,300 test samples, while CV used ~1,000 validation samples per fold. A small leaderboard is susceptible to noise, whereas rigorous CV with consistent folds gives a more reliable signal.
+I discovered 500 duplicate samples (all human class) late in the process. Most experiments were run on the original dataset; only the final models were retrained on deduplicated data. Group stratified k-fold from the start would have been the better approach.
+
+The leaderboard was only 30% of ~1,300 test samples, while CV used ~1,000 validation samples per fold. A small leaderboard is noisy, so rigorous CV with consistent folds is more reliable.
 
 A full academic report is included as `report.pdf`.

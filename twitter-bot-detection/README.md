@@ -126,16 +126,16 @@ GPU acceleration is detected automatically. To force CPU execution, set `tree_me
 - **Evaluation**: Final ranking based on private leaderboard (70% of test data)
 - **My result**: 75th place (private), dropped 53 places from public (was 22nd public)
 - **Selected submission**: 0.94327
-- **Best model (not selected)**: XGBoost+NLP Optuna at 0.94466 — would have placed ~43rd
+- **Best model (not selected)**: XGBoost+NLP Optuna at 0.94466 (would have placed ~43rd)
 - **Gap left on table**: 0.00139
 
-The drop from 22nd to 75th was a clear case of overfitting the public leaderboard. I selected my XGBoost baseline over the XGBoost+NLP variant because the public scores were close and I didn't trust the NLP model to generalize. The final ranking was based entirely on the private set (70% of data), where the NLP model was significantly better. This taught me that when margins are tight and the public set is small, model selection must prioritize cross-validation and generalization over public leaderboard position.
+I dropped from 22nd public to 75th private because I picked the model that scored higher on the public leaderboard (XGBoost optuna: 0.94303 public) over the one that actually generalized better (XGBoost+NLP optuna: 0.94115 public, 0.94466 private). The public set was only 30% of the data. In a field this tight, 0.00139 ROC-AUC was the difference between 75th and ~43rd place.
 
 ## Reflection
 
-This was my first structured Kaggle competition. The main lesson was that fraud detection models benefit both from domain understanding (feature engineering gave strong improvements) and from advanced techniques like pseudo-labelling and ensembling. Pseudo-labelling consistently improved CV ROC-AUC by approximately 1.7%, and the meta-ensemble outperformed all individual models.
+This was my first structured Kaggle competition. Fraud detection models clearly benefit from both domain understanding (feature engineering gave strong improvements) and advanced techniques like pseudo-labelling and ensembling. Pseudo-labelling improved CV ROC-AUC by about 1.7%, and the meta-ensemble outperformed all individual models.
 
-The biggest failure was model selection. I left 0.00139 ROC-AUC on the table — enough to jump from 75th to ~43rd place — by not trusting my best CV model. The public leaderboard was only 30% of the data, and I overfit to it massively (dropping 53 places). I also had poor planning: I combined all experiment notebooks into one close to the submission date, which was a rush to rerun everything.
+The biggest failure was model selection. I left 0.00139 ROC-AUC on the table by picking the model with the higher public score instead of the one that generalized better to the full test set. I also had poor planning: I combined all experiment notebooks into one close to the submission date, which was a rush to rerun everything.
 
 A full academic report is included as `report.pdf`.
 
