@@ -27,7 +27,7 @@ Predict whether a Twitter account is a bot (`target = 1`) or a genuine user (`ta
 Examined feature distributions, class balance, and correlations. Key findings:
 - `statuses_count` is strongly correlated with `average_tweets_per_day` × `account_age_days` — one is redundant
 - `id` correlates negatively with `account_age_days` (−0.74), confirming Twitter's sequential ID assignment
-- Most numeric features are right-skewed; log transformation improves distribution for linear models
+- Most numeric features are right-skewed. Log transformation improves distribution for linear models
 
 ### 2. Feature Engineering
 

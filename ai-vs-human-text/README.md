@@ -663,7 +663,7 @@ get_linear_schedule_with_warmup(
 5. **Deduplication Impact**
    - Deduplicated data: Cleaner training set, slightly different CV scores
    - Original data: More samples, but with duplicates
-   - **Result**: Models trained on both; transformers robust to either
+   - **Result**: Models trained on both. Transformers were robust to either dataset.
 
 ---
 
@@ -893,7 +893,7 @@ A few findings from the experiments:
 
 I applied what I learned from Competition 1. Experiment tracking was much more rigorous. Saving models, metrics, and out-of-fold predictions for each fold made ensembling significantly easier.
 
-I discovered 500 duplicate samples (all human class) late in the process. Most experiments were run on the original dataset; only the final models were retrained on deduplicated data. Group stratified k-fold from the start would have been the better approach.
+I discovered 500 duplicate samples (all human class) late in the process. Most experiments were run on the original dataset. Only the final models were retrained on deduplicated data. Group stratified k-fold from the start would have been the better approach.
 
 The leaderboard was only 30% of ~1,300 test samples, while CV used ~1,000 validation samples per fold. A small leaderboard is noisy, so rigorous CV with consistent folds is more reliable.
 
