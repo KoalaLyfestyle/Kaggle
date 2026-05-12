@@ -34,3 +34,4 @@ Start with `EDA.ipynb`, then explore model notebooks in any order.
 
 - Model weights and generated artifacts are excluded from version control.
 - Random seeds and train/test splits are fixed for reproducible comparisons across experiments.
+- Each project folder includes the original academic report (`report.pdf`) submitted for grading.
