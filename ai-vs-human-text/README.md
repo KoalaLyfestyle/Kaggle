@@ -880,9 +880,22 @@ This competition demonstrated the power of:
 4. **Ensemble methods** for reliable performance gains
 5. **Rigorous tracking** enabling reproducibility and analysis
 
-**Final Kaggle Ranking**: DeBERTa-v3 (0.99964 ROC-AUC) achieved state-of-the-art performance, with simple ensemble (0.99937) as a close, more robust alternative.
+**Final Kaggle Ranking**: 32nd of 113 participants (private score 0.99943). DeBERTa-v3 was the best single model, though the public leaderboard score (0.99964) was higher than the private.
 
 **Key Takeaway**: Modern transformers (DeBERTa, RoBERTa) excel at text classification, but traditional ML + feature engineering remains competitive and interpretable. Ensembling provides the best of both worlds.
+
+## Results
+
+**Competition**: BT4012 In-class Kaggle Competition 2 [2025]
+- **Participants**: 113
+- **Metric**: ROC-AUC
+- **Evaluation**: Final ranking based on private leaderboard (70% of test data)
+- **My result**: 32nd place (private), dropped 13 places from public
+- **Selected submission**: 0.99943 (deduplicated DeBERTa)
+- **Best model (not selected)**: non-deduped DeBERTa at 0.99944 — one rank higher
+- **Gap left on table**: 0.00001
+
+Compared to Competition 1, the drop from public to private was much smaller (13 places vs 53), and the gap between my selected model and best model shrank from 0.00139 to 0.00001. This shows the direct impact of better experiment tracking and model selection discipline. The public leaderboard was only 30% of the test data — trusting CV over public scores was the right call, even if I still left a tiny bit on the table.
 
 ## Personal Reflection
 

@@ -118,11 +118,24 @@ Run from the `twitter-bot-detection/` directory so relative data paths resolve c
 
 GPU acceleration is detected automatically. To force CPU execution, set `tree_method='hist'` (XGBoost) and `device='cpu'` (LightGBM/CatBoost) in the respective notebooks.
 
+## Results
+
+**Competition**: BT4012 In-class Kaggle Competition 1 [2025]
+- **Participants**: 117
+- **Metric**: ROC-AUC
+- **Evaluation**: Final ranking based on private leaderboard (70% of test data)
+- **My result**: 75th place (private), dropped 53 places from public (was 22nd public)
+- **Selected submission**: 0.94327
+- **Best model (not selected)**: XGBoost+NLP Optuna at 0.94466 — would have placed ~43rd
+- **Gap left on table**: 0.00139
+
+The drop from 22nd to 75th was a clear case of overfitting the public leaderboard. I selected my XGBoost baseline over the XGBoost+NLP variant because the public scores were close and I didn't trust the NLP model to generalize. The final ranking was based entirely on the private set (70% of data), where the NLP model was significantly better. This taught me that when margins are tight and the public set is small, model selection must prioritize cross-validation and generalization over public leaderboard position.
+
 ## Reflection
 
 This was my first structured Kaggle competition. The main lesson was that fraud detection models benefit both from domain understanding (feature engineering gave strong improvements) and from advanced techniques like pseudo-labelling and ensembling. Pseudo-labelling consistently improved CV ROC-AUC by approximately 1.7%, and the meta-ensemble outperformed all individual models.
 
-One mistake was poor planning: I had to combine all my experiment notebooks into one close to the submission date, which was a rush to rerun everything. Better tracking and a clearer pipeline from the start would have helped significantly. I also learned not to over-trust the public leaderboard, since it was only 30% of the test data and the top 50 positions differed by roughly 1% — likely noise.
+The biggest failure was model selection. I left 0.00139 ROC-AUC on the table — enough to jump from 75th to ~43rd place — by not trusting my best CV model. The public leaderboard was only 30% of the data, and I overfit to it massively (dropping 53 places). I also had poor planning: I combined all experiment notebooks into one close to the submission date, which was a rush to rerun everything.
 
 A full academic report is included as `report.pdf`.
 
