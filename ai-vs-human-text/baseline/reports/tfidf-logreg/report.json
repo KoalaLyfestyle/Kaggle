@@ -1,0 +1,229 @@
+{
+  "schema": "textbaseline.report/v1",
+  "created_at": "2026-10-13T08:29:56Z",
+  "dataset": "competition",
+  "reproduces_competition": true,
+  "data": {
+    "path": "data/train.csv",
+    "sha256": "538936e14aaed4ae3d5773bdb6cd6f48fd50c9bcadc3d6ec7fa622f67a8c37db",
+    "rows_raw": 4712,
+    "rows_unique": 4212,
+    "duplicate_rows_removed": 500,
+    "conflicting_label_texts_dropped": 0,
+    "label_counts": {
+      "0": 2733,
+      "1": 1479
+    },
+    "test_present": true,
+    "test_rows": 1178,
+    "test_rows_also_in_train": 212,
+    "test_unique_texts_also_in_train": 166,
+    "train_labels_of_overlap": {
+      "0": 166
+    }
+  },
+  "split": {
+    "method": "stratified 5-fold over unique texts (exact and whitespace/case duplicates merged)",
+    "manifest": "splits/folds.csv",
+    "manifest_sha256": "05d52db4ed800548340d974325e894cef9cb410d912c2ce9587f099b79c510c7",
+    "folds": 5,
+    "validation_texts_also_in_training_folds": 0
+  },
+  "model": {
+    "name": "tfidf-word12-logreg",
+    "vectorizer": {
+      "max_features": 10000,
+      "ngram_range": [
+        1,
+        2
+      ],
+      "min_df": 2,
+      "max_df": 0.95,
+      "sublinear_tf": true
+    },
+    "classifier": {
+      "type": "LogisticRegression",
+      "max_iter": 1000,
+      "solver": "liblinear",
+      "random_state": 42
+    },
+    "fit_scope": "vectorizer and classifier are fitted together on the training folds only"
+  },
+  "metrics": {
+    "per_fold": [
+      {
+        "fold": 0,
+        "train_rows": 3369,
+        "valid_rows": 843,
+        "roc_auc": 0.9915015564010079,
+        "log_loss": 0.24927532903743999,
+        "accuracy": 0.9323843416370107,
+        "f1": 0.8961748633879781,
+        "brier": 0.06339136597384636
+      },
+      {
+        "fold": 1,
+        "train_rows": 3369,
+        "valid_rows": 843,
+        "roc_auc": 0.9932617718266713,
+        "log_loss": 0.23986515880033862,
+        "accuracy": 0.9501779359430605,
+        "f1": 0.9263157894736842,
+        "brier": 0.05856230672063088
+      },
+      {
+        "fold": 2,
+        "train_rows": 3370,
+        "valid_rows": 842,
+        "roc_auc": 0.9930158336690112,
+        "log_loss": 0.24813160095379272,
+        "accuracy": 0.9358669833729216,
+        "f1": 0.9018181818181819,
+        "brier": 0.062407281187812705
+      },
+      {
+        "fold": 3,
+        "train_rows": 3370,
+        "valid_rows": 842,
+        "roc_auc": 0.9906878031878033,
+        "log_loss": 0.24892065761856266,
+        "accuracy": 0.9334916864608076,
+        "f1": 0.8989169675090253,
+        "brier": 0.06340560317544958
+      },
+      {
+        "fold": 4,
+        "train_rows": 3370,
+        "valid_rows": 842,
+        "roc_auc": 0.9943569943569944,
+        "log_loss": 0.2364327361487247,
+        "accuracy": 0.9631828978622328,
+        "f1": 0.9458987783595113,
+        "brier": 0.05676305152412076
+      }
+    ],
+    "mean_std": {
+      "roc_auc": {
+        "mean": 0.9925647918882976,
+        "std": 0.0014624265532380922
+      },
+      "log_loss": {
+        "mean": 0.24452509651177173,
+        "std": 0.0059601563843077535
+      },
+      "accuracy": {
+        "mean": 0.9430207690552066,
+        "std": 0.013349626668873562
+      },
+      "f1": {
+        "mean": 0.9138249161096761,
+        "std": 0.021579431861856322
+      },
+      "brier": {
+        "mean": 0.06090592171637206,
+        "std": 0.003055152430504066
+      }
+    },
+    "pooled_out_of_fold": {
+      "roc_auc": 0.9924616048016542,
+      "log_loss": 0.244525117949287,
+      "accuracy": 0.9430199430199431,
+      "f1": 0.9141630901287554,
+      "brier": 0.06090595538903629
+    }
+  },
+  "error_examples": [
+    {
+      "text_id": "9e0d67a118d50ca8",
+      "fold": 1,
+      "label": 0,
+      "prob_ai": 0.7192,
+      "kind": "false positive (human text scored as AI)",
+      "snippet": "This expansion will make our model more scalable and comprehensive, providing traders with valuable signals for a wider range of assets. With a broader perspective on the market, traders can make more informed decisions and seize opportunit"
+    },
+    {
+      "text_id": "915117d0ed170195",
+      "fold": 3,
+      "label": 0,
+      "prob_ai": 0.7139,
+      "kind": "false positive (human text scored as AI)",
+      "snippet": "In terms of future work, there are several strategies to enhance our predictive models. Firstly, further exploration of unsupervised clustering methods can be used for the identification of different types of fraud. By analysing abnormal co"
+    },
+    {
+      "text_id": "47fa0d5753969c4b",
+      "fold": 1,
+      "label": 0,
+      "prob_ai": 0.6938,
+      "kind": "false positive (human text scored as AI)",
+      "snippet": "Git Sync was implemented for effective DAG management. This approach allows for automatic syncing of DAG files from a Git repository to the Kubernetes cluster, ensuring that the Directed Acyclic Graphs (DAGs) are always up-to-date with the "
+    },
+    {
+      "text_id": "0b40df243ae293a4",
+      "fold": 3,
+      "label": 0,
+      "prob_ai": 0.6923,
+      "kind": "false positive (human text scored as AI)",
+      "snippet": "Music and songs contain intricate features that hold significance for listeners. The pervasive consumption of songs by individuals, coupled with research underscoring its impact on daily lives, emphasize the need for careful consideration o"
+    },
+    {
+      "text_id": "a6e908f7e6d7a514",
+      "fold": 0,
+      "label": 0,
+      "prob_ai": 0.6835,
+      "kind": "false positive (human text scored as AI)",
+      "snippet": "A business can implement our comprehensive solution to enhance its customer's experience and drive growth. By developing a fake review detection model, the business can maintain the credibility of its review ecosystem. With sentiment analys"
+    },
+    {
+      "text_id": "aa1d2ed3dd8083e9",
+      "fold": 2,
+      "label": 1,
+      "prob_ai": 0.1658,
+      "kind": "false negative (AI text scored as human)",
+      "snippet": "A strong linear relationship was observed between sheet count and speed loss, as reflected by an R-squared value of 0.99 when the sheet count was regressed against speed loss from the management report. This high R-squared value indicates a"
+    },
+    {
+      "text_id": "4f0d6942f4311c11",
+      "fold": 3,
+      "label": 1,
+      "prob_ai": 0.1737,
+      "kind": "false negative (AI text scored as human)",
+      "snippet": "External service features are identified by querying various third-party services and search engines. For example, we determine if URLs are indexed by Google. If they are not indexed, it might suggest that the URLs are too new or short-live"
+    },
+    {
+      "text_id": "08e20f9a28196890",
+      "fold": 0,
+      "label": 1,
+      "prob_ai": 0.1758,
+      "kind": "false negative (AI text scored as human)",
+      "snippet": "After implementing the recommendation system, we conducted a test using a question from the raw dataset to evaluate its performance. The question used for the test can be accessed at https://stackoverflow.com/questions/53992768, and a scree"
+    },
+    {
+      "text_id": "1da63a8242cf567e",
+      "fold": 3,
+      "label": 1,
+      "prob_ai": 0.2071,
+      "kind": "false negative (AI text scored as human)",
+      "snippet": "We generated image embeddings using the images from the training set. Every image was resized to a dimension of 224 x 224 with three color channels. To extract the image embeddings, we utilized a pre-trained ResNet50 model. This model trans"
+    },
+    {
+      "text_id": "0c612341fcaa8f0f",
+      "fold": 4,
+      "label": 1,
+      "prob_ai": 0.214,
+      "kind": "false negative (AI text scored as human)",
+      "snippet": "According to the coherence score graph, we determined that the optimal number of topics is three. Below, you'll find a diagram showcasing the top 10 words for each topic. The first topic predominantly revolves around companies and their ope"
+    }
+  ],
+  "errors_total": 240,
+  "errors_by_kind": {
+    "false_positive": 39,
+    "false_negative": 201
+  },
+  "environment": {
+    "python": "3.12.3",
+    "platform": "Linux-6.18.44-fc-v114-x86_64-with-glibc2.39",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit_learn": "1.9.1"
+  }
+}

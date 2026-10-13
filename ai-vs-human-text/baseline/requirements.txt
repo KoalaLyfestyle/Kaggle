@@ -1,0 +1,7 @@
+# Direct dependencies of the baseline, pinned. requirements.lock pins the
+# full set for Python 3.12: uv pip compile requirements.txt --python-version 3.12 -o requirements.lock
+numpy==2.5.4
+pandas==3.0.6
+scikit-learn==1.9.1
+joblib==1.6.0
+pytest==9.1.1
