@@ -47,6 +47,8 @@ def main():
         rows.append((text, label))
     rows.append((rows[0][0], rows[0][1]))  # an exact duplicate
     rows.append(("  " + rows[2][0].upper() + "  ", rows[2][1]))  # a case/space duplicate
+    rows.append((rows[4][0].replace(",", " ,").replace(" ", "  "), rows[4][1]))  # a punctuation/space duplicate
+    rows.append((rows[6][0] + " (Smith, 2021)", rows[6][1]))  # a near duplicate: citation added
     rows.append(("This sentence is labelled both ways.", 0))  # a conflicting pair
     rows.append(("this sentence is labelled  both ways.", 1))
 

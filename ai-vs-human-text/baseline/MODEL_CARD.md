@@ -12,40 +12,43 @@ experiments have a fast, reproducible number to beat.
 ## Data
 
 The BT4012 in-class Kaggle competition training set in `../data/train.csv`:
-4,712 rows, 4,212 unique texts after merging duplicates, 31% AI. The texts
+4,712 rows, 4,162 unique texts after merging duplicates, 35.5% of them AI. The texts
 are short paragraphs; the examples seen include project-report passages and
 product reviews. Where the data came from and its licence are not
 recorded in this repository.
 
 ## Performance
 
-5-fold cross-validation on unique texts (`reports/tfidf-logreg/report.json`):
+5-fold cross-validation on unique texts, near-duplicates kept in one fold
+(`reports/tfidf-logreg/report.json`):
 
 | Metric | Mean | Std |
 |---|---|---|
-| ROC-AUC | 0.9926 | 0.0015 |
-| Log loss | 0.2445 | 0.0060 |
-| Accuracy at 0.5 | 0.943 | 0.013 |
-| F1 at 0.5 | 0.914 | 0.022 |
+| ROC-AUC | 0.9920 | 0.0026 |
+| Log loss | 0.2470 | 0.0093 |
+| Accuracy at 0.5 | 0.944 | 0.013 |
+| F1 at 0.5 | 0.917 | 0.021 |
 
 No competition leaderboard score was produced for this exact run.
 
 ## Expected failure modes
 
-- **AI text written in a plain, specific style is missed.** Most errors (201
-  of 240) are AI texts scored as human. The most confident misses describe
+- **AI text written in a plain, specific style is missed.** Most errors (192
+  of 233) are AI texts scored as human. The most confident misses describe
   concrete steps, numbers, or tools ("we generated image embeddings using
   ResNet50 ..."). The model keys on generic phrasing, not on authorship.
-- **Polished human writing is flagged.** The 39 false positives are human
+- **Polished human writing is flagged.** The 41 false positives are human
   texts with formal connectives ("comprehensive", "enhance", "Firstly ...").
   Careful non-native or edited writing is at risk.
-- **Probabilities are not calibrated.** Log loss is 0.24 against ROC-AUC
+- **Probabilities are not calibrated.** Log loss is 0.25 against ROC-AUC
   0.99: the ranking is good, the probability values are not. Do not read 0.7
   as "70% likely". Use it for ranking, or calibrate on held-out data first.
 - **Narrow domain.** Trained on one course's texts and one set of generators.
   Expect a large drop on other topics, other languages, newer models, or
   texts that were paraphrased or lightly edited by a human.
-- **Short texts.** Below a sentence or two there is little signal.
+- **Short texts (expected, not measured).** The shortest training text is
+  about 100 characters, so behaviour on a sentence or less is untested and
+  likely poor.
 
 ## Not for
 

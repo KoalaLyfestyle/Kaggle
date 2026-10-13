@@ -44,7 +44,6 @@ def evaluate(
     splits_path: Path,
     out_dir: Path,
     min_df: int | None = None,
-    label: str = "competition",
     n_errors: int = 10,
 ) -> dict:
     train = data.load_train(data_dir)
@@ -55,11 +54,11 @@ def evaluate(
     folds = sorted(frame["fold"].unique())
     oof = np.full(len(frame), np.nan)
     per_fold = []
-    shared_texts = 0
+    shared_groups = 0
     for fold in folds:
         train_rows = frame["fold"] != fold
         valid_rows = ~train_rows
-        shared_texts += len(set(frame.loc[train_rows, "text_id"]) & set(frame.loc[valid_rows, "text_id"]))
+        shared_groups += len(set(frame.loc[train_rows, "group_id"]) & set(frame.loc[valid_rows, "group_id"]))
         # Train-only fitting: a new pipeline, fitted on the training folds alone.
         pipe = model.build_pipeline(min_df=min_df)
         pipe.fit(frame.loc[train_rows, "text"], frame.loc[train_rows, "label"])
@@ -109,15 +108,18 @@ def evaluate(
     report = {
         "schema": REPORT_SCHEMA,
         "created_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "dataset": label,
-        "reproduces_competition": label == "competition",
+        "dataset": "competition" if train.checks["is_competition_data"] else "other (not the committed competition train.csv)",
         "data": {**train.checks, **data.overlap_checks(train, test)},
         "split": {
-            "method": "stratified 5-fold over unique texts (exact and whitespace/case duplicates merged)",
-            "manifest": str(splits_path),
+            "method": (
+                f"stratified {len(folds)}-fold over unique texts, near-duplicate groups kept in one fold "
+                f"(duplicates merged on lowercase letters and digits; groups share the first "
+                f"{data.GROUP_PREFIX_CHARS} such characters)"
+            ),
+            "manifest": data.display_path(splits_path),
             "manifest_sha256": data.sha256_file(splits_path),
             "folds": len(folds),
-            "validation_texts_also_in_training_folds": int(shared_texts),
+            "validation_groups_also_in_training_folds": int(shared_groups),
         },
         "model": model.describe() | ({"vectorizer_min_df_override": min_df} if min_df else {}),
         "metrics": {"per_fold": per_fold, "mean_std": summary, "pooled_out_of_fold": pooled},
@@ -146,15 +148,19 @@ def render_markdown(report: dict) -> str:
         f"Dataset: {report['dataset']}. Created {report['created_at']}.",
         "",
     ]
-    if not report["reproduces_competition"]:
-        lines += ["These numbers come from a synthetic fixture. They say nothing about the competition.", ""]
+    if report["dataset"] != "competition":
+        lines += ["These numbers do not come from the competition data. They say nothing about the competition.", ""]
+    else:
+        lines += ["Cross-validation on the training data. This is not a leaderboard score.", ""]
     lines += [
-        "| Metric | Mean | Std (5 folds) |",
+        f"| Metric | Mean | Std ({report['split']['folds']} folds) |",
         "|---|---|---|",
         *[f"| {k} | {m[k]['mean']:.4f} | {m[k]['std']:.4f} |" for k in METRICS],
         "",
         f"Rows: {d['rows_raw']} raw, {d['rows_unique']} unique after merging duplicates "
-        f"({d['duplicate_rows_removed']} removed, {d['conflicting_label_texts_dropped']} conflicting texts dropped).",
+        f"({d['duplicate_rows_removed']} removed, {d['conflicting_label_texts_dropped']} conflicting texts dropped). "
+        f"{d['texts_in_near_duplicate_groups']} texts sit in {d['near_duplicate_groups']} near-duplicate groups, "
+        "each kept within one fold.",
     ]
     if d.get("test_present"):
         lines.append(

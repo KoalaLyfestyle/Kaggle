@@ -4,10 +4,12 @@ on:
   push:
     paths:
       - "ai-vs-human-text/baseline/**"
+      - "ai-vs-human-text/data/**"
       - ".github/workflows/ai-vs-human-baseline.yml"
   pull_request:
     paths:
       - "ai-vs-human-text/baseline/**"
+      - "ai-vs-human-text/data/**"
       - ".github/workflows/ai-vs-human-baseline.yml"
 
 permissions:
@@ -31,5 +33,5 @@ jobs:
         run: |
           python -m textbaseline make-splits --data-dir tests/fixtures/data --splits runs/fixture-folds.csv
           python -m textbaseline evaluate --data-dir tests/fixtures/data --splits runs/fixture-folds.csv \
-            --min-df 1 --dataset-label fixture --out runs/fixture
+            --min-df 1 --out runs/fixture
           cat runs/fixture/report.md

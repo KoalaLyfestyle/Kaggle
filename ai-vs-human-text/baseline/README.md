@@ -25,16 +25,22 @@ Data comes from `../data` by default. Use `--data-dir DIR` or set
 
 ## What is fixed
 
-- **Duplicates.** Texts are merged when they match after lowercasing and
-  collapsing whitespace. Each text gets a `text_id` (SHA-1 of that form).
-  Texts with conflicting labels are dropped. The competition data has 500
-  duplicate rows, all human.
+- **Duplicates.** Texts are merged when they match on lowercase letters and
+  digits alone, so "Big Query" and "BigQuery." count as the same text. Each
+  text gets a `text_id` (SHA-1 of that form). Texts with conflicting labels
+  are dropped. The competition data has 550 such duplicate rows, all human.
+- **Near-duplicates.** Texts whose normalised form shares its first 100
+  characters (for example the same paragraph with a citation added) form a
+  group. Folds keep each group together: 280 texts in 134 groups.
 - **Folds.** `splits/folds.csv` assigns every unique text to one of 5 folds
-  (stratified, seed 42). `evaluate` refuses to run if the manifest does not
-  match the data. Regenerate it with `make-splits --force` only if the data
+  (stratified by label, grouped as above, seed 42). `evaluate` refuses to run
+  if the manifest does not match the data, splits a group, or leaves a fold
+  with one class. Regenerate it with `make-splits --force` only if the data
   changed on purpose.
 - **Fitting.** The vectorizer and classifier are refitted inside each fold on
   the training folds only. A test checks this.
+- **Which data.** The report records the SHA-256 of `train.csv` and says
+  whether it is the committed competition file.
 - **Versions.** `requirements.lock` pins every package for Python 3.12.
 
 ## Files

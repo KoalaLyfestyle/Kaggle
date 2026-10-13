@@ -34,13 +34,12 @@ def main(argv: list[str] | None = None) -> int:
 
     e = sub.add_parser("evaluate", help="cross-validate on the fixed folds and write a report")
     common(e)
-    e.add_argument("--out", type=Path, default=Path("runs/evaluate"))
+    e.add_argument("--out", type=Path, default=HERE / "runs" / "evaluate")
     e.add_argument("--min-df", type=int, help="override min_df (the fixture uses 1)")
-    e.add_argument("--dataset-label", default="competition")
 
     t = sub.add_parser("train", help="fit on all training texts and write a submission")
     t.add_argument("--data-dir")
-    t.add_argument("--out", type=Path, default=Path("runs/train"))
+    t.add_argument("--out", type=Path, default=HERE / "runs" / "train")
     t.add_argument("--min-df", type=int)
 
     args = parser.parse_args(argv)
@@ -55,7 +54,7 @@ def main(argv: list[str] | None = None) -> int:
             folds.to_csv(args.splits, index=False)
             print(f"wrote {args.splits}: {len(folds)} texts in {args.folds} folds (seed {args.seed})")
         elif args.command == "evaluate":
-            report = evaluate(data_dir, args.splits, args.out, args.min_df, args.dataset_label)
+            report = evaluate(data_dir, args.splits, args.out, args.min_df)
             auc = report["metrics"]["mean_std"]["roc_auc"]
             print(f"ROC-AUC {auc['mean']:.4f} ± {auc['std']:.4f}; report: {args.out / 'report.json'}")
         else:
