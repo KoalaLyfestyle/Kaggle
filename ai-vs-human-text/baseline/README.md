@@ -25,8 +25,8 @@ Data comes from `../data` by default. Use `--data-dir DIR` or set
 
 ## What is fixed
 
-- **Duplicates.** Texts are merged when they match on lowercase letters and
-  digits alone, so "Big Query" and "BigQuery." count as the same text. Each
+- **Duplicates.** Texts are merged when they match on letters and digits
+  alone (any script, case-folded), so "Big Query" and "BigQuery." count as the same text. Each
   text gets a `text_id` (SHA-1 of that form). Texts with conflicting labels
   are dropped. The competition data has 550 such duplicate rows, all human.
 - **Near-duplicates.** Texts whose normalised form shares its first 100

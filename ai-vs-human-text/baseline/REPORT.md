@@ -11,14 +11,14 @@ layout).
 
 | Model | Data | Split | CV ROC-AUC | CV log loss | Public LB | Status |
 |---|---|---|---|---|---|---|
-| TF-IDF + LogReg (this folder) | 4,162 unique texts | fixed folds, near-duplicates grouped | 0.9920 ± 0.0026 | 0.247 | not submitted | rerun |
+| TF-IDF + LogReg (this folder) | 4,162 unique texts | fixed folds, near-duplicates grouped | 0.9915 ± 0.0018 | 0.248 | not submitted | rerun |
 | TF-IDF + LogReg (notebook 1) | 4,712 rows, with duplicates | StratifiedKFold, seed 42 | 0.9940 ± 0.0013 | 0.231 | 0.98954 | historical |
 | TF-IDF + LogReg (notebook 1) | 4,212 rows, deduplicated | StratifiedKFold, seed 42 | 0.9923 ± 0.0017 | 0.245 | none | historical |
 | DeBERTa-v3-base | 4,712 rows, with duplicates | StratifiedKFold, seed 42 | 0.9994 ± 0.0002 | 0.050 | 0.99964 | historical, not reproduced |
 | DeBERTa-v3-base | deduplicated | StratifiedKFold, seed 42 | 0.9988 ± 0.0013 | 0.071 | 0.99952 | historical, not reproduced |
 
 The rerun baseline matches the historical deduplicated notebook run within
-noise (0.9920 against 0.9923), even though it also merges near-copies that
+noise (0.9915 against 0.9923), even though it also merges near-copies that
 the notebook kept. DeBERTa ranks better (ROC-AUC about 0.999)
 and its probabilities are much better calibrated (log loss 0.05 to 0.07
 against 0.25).
@@ -76,17 +76,16 @@ exactly. The baseline uses the untuned settings on purpose.
 ## Error examples
 
 From `reports/tfidf-logreg/report.json`, out-of-fold at a 0.5 threshold:
-233 errors, 192 of them AI texts scored as human.
+240 errors, 197 of them AI texts scored as human (one example per near-duplicate group).
 
 - AI scored as human (p = 0.16): "External service features are identified
   by querying various third-party services and search engines ..."
-- AI scored as human (p = 0.18): "A strong linear relationship was observed
+- AI scored as human (p = 0.17): "A strong linear relationship was observed
   between sheet count and speed loss, as reflected by an R-squared value of
   0.99 ..."
 - Human scored as AI (p = 0.83): "This expansion will make our model more
   scalable and comprehensive, providing traders with valuable signals ..."
-  (two near-identical versions of this text are in the data, in one group)
-- Human scored as AI (p = 0.71): "In terms of future work, there are several
+- Human scored as AI (p = 0.73): "In terms of future work, there are several
   strategies to enhance our predictive models. Firstly, ..."
 
 The baseline reacts to generic connective phrasing ("comprehensive",

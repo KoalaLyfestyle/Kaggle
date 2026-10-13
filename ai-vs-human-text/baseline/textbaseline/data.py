@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import os
 import re
+import unicodedata
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -17,7 +18,7 @@ TEST_FILE = "test.csv"
 TRAIN_COLUMNS = {"text", "label"}
 TEST_COLUMNS = {"id", "text"}
 
-_NON_ALNUM = re.compile(r"[^a-z0-9]+")
+_NON_WORD = re.compile(r"[\W_]+")
 GROUP_PREFIX_CHARS = 100
 
 # SHA-256 of the committed competition train.csv. Reports say whether they ran
@@ -43,8 +44,9 @@ def resolve_data_dir(data_dir: str | Path | None = None) -> Path:
 
 
 def normalise(text: str) -> str:
-    """Lowercase letters and digits only. "Big Query" and "BigQuery." match."""
-    return _NON_ALNUM.sub("", text.lower())
+    """Letters and digits only (any script), case-folded after NFKC.
+    "Big Query" and "BigQuery." match; "café" keeps its "é"."""
+    return _NON_WORD.sub("", unicodedata.normalize("NFKC", text).casefold())
 
 
 def text_id(text: str) -> str:
@@ -95,6 +97,9 @@ def load_train(data_dir: Path) -> TrainData:
     raw["text"] = raw["text"].astype(str)
     if not set(raw["label"].unique()) <= {0, 1}:
         raise DataError(f"{path}: label must be 0 (human) or 1 (AI).")
+    empty = raw["text"].map(normalise) == ""
+    if empty.any():
+        raise DataError(f"{path}: {int(empty.sum())} texts have no letters or digits (first at row {int(empty.idxmax()) + 2}).")
     raw["text_id"] = raw["text"].map(text_id)
 
     labels_per_text = raw.groupby("text_id")["label"].nunique()
@@ -187,7 +192,7 @@ def read_folds(path: Path, frame: pd.DataFrame) -> pd.Series:
     if not np.array_equal(labels, frame["label"].to_numpy()):
         raise DataError(f"{path}: labels in the split file differ from the training data.")
 
-    raw = by_id.loc[frame["text_id"], "fold"]
+    raw = pd.to_numeric(by_id.loc[frame["text_id"], "fold"], errors="coerce")
     if raw.isna().any() or not np.allclose(raw, raw.round()):
         raise DataError(f"{path}: every fold must be a whole number.")
     folds = pd.Series(raw.round().astype(int).to_numpy(), index=frame.index, name="fold")
@@ -198,9 +203,9 @@ def read_folds(path: Path, frame: pd.DataFrame) -> pd.Series:
         for part, rows in (("validation", folds == fold), ("training", folds != fold)):
             if frame.loc[rows, "label"].nunique() < 2:
                 raise DataError(f"{path}: fold {fold} has only one class in its {part} rows.")
-    if "group_id" in by_id.columns:
-        groups = pd.Series(by_id.loc[frame["text_id"], "group_id"].to_numpy(), index=frame.index)
-        split_groups = pd.DataFrame({"g": groups, "f": folds}).groupby("g")["f"].nunique()
-        if (split_groups > 1).any():
-            raise DataError(f"{path}: {int((split_groups > 1).sum())} near-duplicate groups span more than one fold.")
+    # Groups come from the data, not from the manifest, so an old or edited
+    # manifest cannot hide a split group.
+    split_groups = pd.DataFrame({"g": frame["group_id"], "f": folds}).groupby("g")["f"].nunique()
+    if (split_groups > 1).any():
+        raise DataError(f"{path}: {int((split_groups > 1).sum())} near-duplicate groups span more than one fold.")
     return folds

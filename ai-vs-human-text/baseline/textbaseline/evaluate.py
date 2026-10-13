@@ -86,11 +86,13 @@ def evaluate(
     frame["prob_ai"] = oof
     frame["error"] = np.abs(frame["label"] - frame["prob_ai"])
     wrong = frame[(frame["prob_ai"] >= 0.5) != (frame["label"] == 1)]
+    # One example per near-duplicate group.
+    distinct = wrong.sort_values("error", ascending=False).drop_duplicates("group_id")
     # The most confident mistakes of each kind, so both failure modes show.
     worst = pd.concat(
         [
-            wrong[wrong["label"] == 0].sort_values("error", ascending=False).head(n_errors // 2),
-            wrong[wrong["label"] == 1].sort_values("error", ascending=False).head(n_errors - n_errors // 2),
+            distinct[distinct["label"] == 0].head(n_errors // 2),
+            distinct[distinct["label"] == 1].head(n_errors - n_errors // 2),
         ]
     )
     examples = [

@@ -1,6 +1,6 @@
 {
   "schema": "textbaseline.report/v1",
-  "created_at": "2026-10-13T08:37:35Z",
+  "created_at": "2026-10-13T08:41:07Z",
   "dataset": "competition",
   "data": {
     "path": "data/train.csv",
@@ -28,7 +28,7 @@
   "split": {
     "method": "stratified 5-fold over unique texts, near-duplicate groups kept in one fold (duplicates merged on lowercase letters and digits; groups share the first 100 such characters)",
     "manifest": "baseline/splits/folds.csv",
-    "manifest_sha256": "7d55cfd6ab5b25e6d03b6019e2ba906e2d3dbc19b24fe8e15a027690558e6f7a",
+    "manifest_sha256": "0d8937e23462f876bc6d9b45d2f1bd3d4f68fc5387d5b00a5681f8ac8bb263c8",
     "folds": 5,
     "validation_groups_also_in_training_folds": 0
   },
@@ -58,137 +58,137 @@
         "fold": 0,
         "train_rows": 3329,
         "valid_rows": 833,
-        "roc_auc": 0.9892609089536464,
-        "log_loss": 0.25452477669784834,
-        "accuracy": 0.9303721488595438,
-        "f1": 0.894927536231884,
-        "brier": 0.06585997213327471
+        "roc_auc": 0.9908337108057779,
+        "log_loss": 0.24475052030177394,
+        "accuracy": 0.9495798319327731,
+        "f1": 0.9257950530035336,
+        "brier": 0.06052346595276672
       },
       {
         "fold": 1,
-        "train_rows": 3330,
-        "valid_rows": 832,
-        "roc_auc": 0.9893633809929616,
-        "log_loss": 0.25669804245671124,
-        "accuracy": 0.9326923076923077,
-        "f1": 0.8992805755395683,
-        "brier": 0.06552624106302463
+        "train_rows": 3329,
+        "valid_rows": 833,
+        "roc_auc": 0.9917836831244652,
+        "log_loss": 0.2533463286678532,
+        "accuracy": 0.936374549819928,
+        "f1": 0.9038112522686026,
+        "brier": 0.06429678259912787
       },
       {
         "fold": 2,
         "train_rows": 3330,
         "valid_rows": 832,
-        "roc_auc": 0.995033279548205,
-        "log_loss": 0.23985426370313465,
-        "accuracy": 0.9555288461538461,
-        "f1": 0.9347442680776014,
-        "brier": 0.05814539580670634
+        "roc_auc": 0.9898746962093236,
+        "log_loss": 0.24856319478697048,
+        "accuracy": 0.9375,
+        "f1": 0.9068100358422939,
+        "brier": 0.0628009361057818
       },
       {
         "fold": 3,
         "train_rows": 3330,
         "valid_rows": 832,
-        "roc_auc": 0.9934386345300523,
-        "log_loss": 0.23516962606249486,
-        "accuracy": 0.9591346153846154,
-        "f1": 0.9409722222222222,
-        "brier": 0.05666595721841713
+        "roc_auc": 0.9943966821298911,
+        "log_loss": 0.24110108829092797,
+        "accuracy": 0.9519230769230769,
+        "f1": 0.9293286219081273,
+        "brier": 0.059372228168961635
       },
       {
         "fold": 4,
-        "train_rows": 3329,
-        "valid_rows": 833,
-        "roc_auc": 0.9928154411394634,
-        "log_loss": 0.248778009595653,
-        "accuracy": 0.9423769507803121,
-        "f1": 0.9136690647482014,
-        "brier": 0.06203152664116177
+        "train_rows": 3330,
+        "valid_rows": 832,
+        "roc_auc": 0.9904195240016136,
+        "log_loss": 0.25319323581550274,
+        "accuracy": 0.9362980769230769,
+        "f1": 0.9058614564831261,
+        "brier": 0.0640050644711822
       }
     ],
     "mean_std": {
       "roc_auc": {
-        "mean": 0.9919823290328658,
-        "std": 0.0025684731171281587
+        "mean": 0.9914616592542143,
+        "std": 0.0017830364198617116
       },
       "log_loss": {
-        "mean": 0.24700494370316842,
-        "std": 0.009285133042819365
+        "mean": 0.24819087357260564,
+        "std": 0.005334839601697473
       },
       "accuracy": {
-        "mean": 0.9440209737741251,
-        "std": 0.013020994564401485
+        "mean": 0.942335107119771,
+        "std": 0.007742212867543139
       },
       "f1": {
-        "mean": 0.9167187333638955,
-        "std": 0.020624001326936238
+        "mean": 0.9143212839011368,
+        "std": 0.01219954777575835
       },
       "brier": {
-        "mean": 0.06164581857251692,
-        "std": 0.004183823559202902
+        "mean": 0.06219969545956404,
+        "std": 0.0021692705394085817
       }
     },
     "pooled_out_of_fold": {
-      "roc_auc": 0.9919022861242637,
-      "log_loss": 0.24700717649963339,
-      "accuracy": 0.9440172993753003,
-      "f1": 0.916993231207695,
-      "brier": 0.06164692377713716
+      "roc_auc": 0.9913692931000461,
+      "log_loss": 0.24819128565857984,
+      "accuracy": 0.9423354156655455,
+      "f1": 0.9144079885877318,
+      "brier": 0.06219979657864929
     }
   },
   "error_examples": [
     {
       "text_id": "b157850fa0acaf8e",
-      "fold": 1,
+      "fold": 2,
       "label": 0,
-      "prob_ai": 0.828,
-      "kind": "false positive (human text scored as AI)",
-      "snippet": "This expansion will make our model more scalable and comprehensive, providing traders with valuable signals for a wider range of assets. With a broader perspective on the market, traders can make more informed decisions and seize opportunit"
-    },
-    {
-      "text_id": "a1fb1fc30d9f237c",
-      "fold": 1,
-      "label": 0,
-      "prob_ai": 0.8106,
+      "prob_ai": 0.8294,
       "kind": "false positive (human text scored as AI)",
       "snippet": "This expansion will make our model more scalable and comprehensive, providing traders with valuable signals for a wider range of assets. With a broader perspective on the market, traders can make more informed decisions and seize opportunit"
     },
     {
       "text_id": "8c8d82303ca17b72",
-      "fold": 1,
+      "fold": 4,
       "label": 0,
-      "prob_ai": 0.7128,
+      "prob_ai": 0.7298,
       "kind": "false positive (human text scored as AI)",
       "snippet": "In terms of future work, there are several strategies to enhance our predictive models. Firstly, further exploration of unsupervised clustering methods can be used for the identification of different types of fraud. By analysing abnormal co"
     },
     {
-      "text_id": "9fd05930690b25b7",
+      "text_id": "ab2d65919ab047c0",
       "fold": 0,
       "label": 0,
-      "prob_ai": 0.7026,
+      "prob_ai": 0.6973,
       "kind": "false positive (human text scored as AI)",
-      "snippet": "Music and songs contain intricate features that hold significance for listeners. The pervasive consumption of songs by individuals, coupled with research underscoring its impact on daily lives, emphasize the need for careful consideration o"
+      "snippet": "Git Sync was implemented for effective DAG management. This approach allows for automatic syncing of DAG files from a Git repository to the Kubernetes cluster, ensuring that the Directed Acyclic Graphs (DAGs) are always up-to-date with the "
     },
     {
-      "text_id": "a472612ab5ab09e9",
-      "fold": 1,
+      "text_id": "6477bab560c536f5",
+      "fold": 2,
       "label": 0,
-      "prob_ai": 0.6888,
+      "prob_ai": 0.6879,
       "kind": "false positive (human text scored as AI)",
-      "snippet": "1.The two sets of game recommendations, based on the user's gaming history and similar users' gaming history, undergo a comprehensive evaluation through manual Exploratory Data Analysis (EDA) in comparison to the games within the input user"
+      "snippet": "To ensure the integrity and relevance of our dataset, we implemented several comprehensive pre-processing steps. These steps encompassed the removal of outliers, which could potentially skew our analysis, as well as filtering out null value"
+    },
+    {
+      "text_id": "7911ef9fb38f41fe",
+      "fold": 2,
+      "label": 0,
+      "prob_ai": 0.6697,
+      "kind": "false positive (human text scored as AI)",
+      "snippet": "The Random Forest model offers an alternative approach to understanding the relationship between Bitcoin prices and tweet sentiment. The price and sentiment datasets undergo preprocessing and aggregation, after which they are merged and par"
     },
     {
       "text_id": "403c56c863f2bfee",
-      "fold": 3,
+      "fold": 0,
       "label": 1,
-      "prob_ai": 0.1613,
+      "prob_ai": 0.1575,
       "kind": "false negative (AI text scored as human)",
       "snippet": "External service features are identified by querying various third-party services and search engines. For example, we determine if URLs are indexed by Google. If they are not indexed, it might suggest that the URLs are too new or short-live"
     },
     {
       "text_id": "a843056284496888",
-      "fold": 4,
+      "fold": 1,
       "label": 1,
-      "prob_ai": 0.1776,
+      "prob_ai": 0.1674,
       "kind": "false negative (AI text scored as human)",
       "snippet": "A strong linear relationship was observed between sheet count and speed loss, as reflected by an R-squared value of 0.99 when the sheet count was regressed against speed loss from the management report. This high R-squared value indicates a"
     },
@@ -196,31 +196,31 @@
       "text_id": "c9dee4d992342b9b",
       "fold": 0,
       "label": 1,
-      "prob_ai": 0.1955,
+      "prob_ai": 0.1819,
       "kind": "false negative (AI text scored as human)",
       "snippet": "After implementing the recommendation system, we conducted a test using a question from the raw dataset to evaluate its performance. The question used for the test can be accessed at https://stackoverflow.com/questions/53992768, and a scree"
-    },
-    {
-      "text_id": "bb964ab4ee1d24e6",
-      "fold": 0,
-      "label": 1,
-      "prob_ai": 0.213,
-      "kind": "false negative (AI text scored as human)",
-      "snippet": "The team used Anvil to develop the front-end interface for our model implementation. Anvil provides flexible hosting options, allowing components such as the model, data sets, and code to be hosted either on the client-side or on Anvil's se"
     },
     {
       "text_id": "7416ca92a0f27cef",
       "fold": 0,
       "label": 1,
-      "prob_ai": 0.2162,
+      "prob_ai": 0.2164,
       "kind": "false negative (AI text scored as human)",
       "snippet": "We generated image embeddings using the images from the training set. Every image was resized to a dimension of 224 x 224 with three color channels. To extract the image embeddings, we utilized a pre-trained ResNet50 model. This model trans"
+    },
+    {
+      "text_id": "5503fd55ff65b468",
+      "fold": 1,
+      "label": 1,
+      "prob_ai": 0.218,
+      "kind": "false negative (AI text scored as human)",
+      "snippet": "According to the coherence score graph, we determined that the optimal number of topics is three. Below, you'll find a diagram showcasing the top 10 words for each topic. The first topic predominantly revolves around companies and their ope"
     }
   ],
-  "errors_total": 233,
+  "errors_total": 240,
   "errors_by_kind": {
-    "false_positive": 41,
-    "false_negative": 192
+    "false_positive": 43,
+    "false_negative": 197
   },
   "environment": {
     "python": "3.12.3",

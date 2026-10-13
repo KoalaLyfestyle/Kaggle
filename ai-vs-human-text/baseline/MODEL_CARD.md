@@ -24,20 +24,20 @@ recorded in this repository.
 
 | Metric | Mean | Std |
 |---|---|---|
-| ROC-AUC | 0.9920 | 0.0026 |
-| Log loss | 0.2470 | 0.0093 |
-| Accuracy at 0.5 | 0.944 | 0.013 |
-| F1 at 0.5 | 0.917 | 0.021 |
+| ROC-AUC | 0.9915 | 0.0018 |
+| Log loss | 0.2482 | 0.0053 |
+| Accuracy at 0.5 | 0.942 | 0.008 |
+| F1 at 0.5 | 0.914 | 0.012 |
 
 No competition leaderboard score was produced for this exact run.
 
 ## Expected failure modes
 
-- **AI text written in a plain, specific style is missed.** Most errors (192
-  of 233) are AI texts scored as human. The most confident misses describe
+- **AI text written in a plain, specific style is missed.** Most errors (197
+  of 240) are AI texts scored as human. The most confident misses describe
   concrete steps, numbers, or tools ("we generated image embeddings using
   ResNet50 ..."). The model keys on generic phrasing, not on authorship.
-- **Polished human writing is flagged.** The 41 false positives are human
+- **Polished human writing is flagged.** The 43 false positives are human
   texts with formal connectives ("comprehensive", "enhance", "Firstly ...").
   Careful non-native or edited writing is at risk.
 - **Probabilities are not calibrated.** Log loss is 0.25 against ROC-AUC

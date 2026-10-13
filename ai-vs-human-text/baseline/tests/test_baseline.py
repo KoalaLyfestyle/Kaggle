@@ -135,6 +135,32 @@ def test_bad_fold_manifests_are_rejected(tmp_path, fixture_splits, change, messa
         data.read_folds(bad, data.load_train(FIXTURE).frame)
 
 
+def test_a_manifest_without_groups_cannot_split_a_group(tmp_path, fixture_splits):
+    stale = _split_a_group(pd.read_csv(fixture_splits, dtype={"text_id": str, "group_id": str})).drop(columns="group_id")
+    bad = tmp_path / "stale.csv"
+    stale.to_csv(bad, index=False)
+    with pytest.raises(data.DataError, match="near-duplicate groups span"):
+        data.read_folds(bad, data.load_train(FIXTURE).frame)
+
+
+def test_non_numeric_folds_are_rejected(tmp_path, fixture_splits):
+    manifest = pd.read_csv(fixture_splits, dtype={"text_id": str, "group_id": str})
+    manifest["fold"] = manifest["fold"].astype(str)
+    manifest.loc[0, "fold"] = "x"
+    bad = tmp_path / "bad.csv"
+    manifest.to_csv(bad, index=False)
+    with pytest.raises(data.DataError, match="whole number"):
+        data.read_folds(bad, data.load_train(FIXTURE).frame)
+
+
+def test_normalisation_keeps_non_ascii_letters_and_rejects_empty_texts(tmp_path):
+    assert data.normalise("Naïve  Café!") == "naïvecafé"
+    assert data.text_id("naïve café") != data.text_id("nave caf")
+    (tmp_path / "train.csv").write_text("text,label\n\"...!!!\",0\nhello world,1\n")
+    with pytest.raises(data.DataError, match="no letters or digits"):
+        data.load_train(tmp_path)
+
+
 def test_near_duplicates_share_a_fold(fixture_splits):
     manifest = pd.read_csv(fixture_splits, dtype={"text_id": str, "group_id": str})
     assert (manifest.groupby("group_id")["fold"].nunique() == 1).all()
