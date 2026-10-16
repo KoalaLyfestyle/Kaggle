@@ -179,3 +179,60 @@ def test_committed_folds_match_the_committed_data():
     assert data.load_train(REAL_DATA).checks["is_competition_data"]
     regenerated = data.make_folds(frame).set_index("text_id")["fold"]
     assert (regenerated.loc[frame["text_id"]].to_numpy() == folds.to_numpy()).all()
+
+
+def _fixture_texts():
+    return data.load_train(FIXTURE).frame["text"]
+
+
+def test_vocabulary_cutoff_inside_a_tie_keeps_the_alphabetically_first_terms():
+    from sklearn.feature_extraction.text import CountVectorizer
+
+    texts = _fixture_texts()
+    counter = CountVectorizer(ngram_range=(1, 2), min_df=2, max_df=0.95)
+    totals = dict(zip(counter.fit(texts).get_feature_names_out(), counter.transform(texts).sum(axis=0).A1))
+    ranked = sorted(totals.items(), key=lambda kv: (-kv[1], kv[0]))
+    # A cutoff near 50 that falls inside a run of equal counts.
+    k = next(k for k in range(50, len(ranked)) if ranked[k - 1][1] == ranked[k][1])
+    tie_count = ranked[k - 1][1]
+    tied = sorted(t for t, c in totals.items() if c == tie_count)
+    above = {t for t, c in totals.items() if c > tie_count}
+    expected = above | set(tied[: k - len(above)])
+
+    vec = model.TopTermsTfidf(max_features=k).fit(texts)
+    assert set(vec.kept_terms_) == expected
+    assert len(vec.kept_terms_) == k
+    # Same result whatever the row order, so the tie-break does not depend on the input.
+    assert model.TopTermsTfidf(max_features=k).fit(texts[::-1]).kept_terms_ == vec.kept_terms_
+
+
+def test_without_a_cap_it_matches_plain_tfidf():
+    from sklearn.feature_extraction.text import TfidfVectorizer
+
+    texts = _fixture_texts()
+    ours = model.TopTermsTfidf(max_features=100000).fit(texts)
+    plain = TfidfVectorizer(ngram_range=(1, 2), min_df=2, max_df=0.95, sublinear_tf=True).fit(texts)
+    assert ours.vocabulary_ == plain.vocabulary_
+    assert abs(ours.transform(texts) - plain.transform(texts)).max() < 1e-12
+
+
+def test_fold_mismatch_on_other_data_does_not_suggest_overwriting_the_committed_folds(capsys):
+    assert main(["evaluate", "--data-dir", str(FIXTURE)]) == 2
+    err = capsys.readouterr().err
+    assert "--splits <new path>" in err
+    assert "--force" not in err
+
+
+@pytest.mark.skipif(not (REAL_DATA / "train.csv").is_file(), reason="competition data not in this checkout")
+def test_evaluate_reproduces_the_committed_report(tmp_path):
+    committed = json.loads((BASELINE / "reports" / "tfidf-logreg" / "report.json").read_text())
+    fresh = evaluate_module.evaluate(REAL_DATA, BASELINE / "splits" / "folds.csv", tmp_path / "eval")
+    assert fresh["data"] == committed["data"]
+    assert fresh["split"] == committed["split"]
+    assert fresh["errors_total"] == committed["errors_total"]
+    assert fresh["errors_by_kind"] == committed["errors_by_kind"]
+    assert [e["text_id"] for e in fresh["error_examples"]] == [e["text_id"] for e in committed["error_examples"]]
+    for new, old in zip(fresh["metrics"]["per_fold"], committed["metrics"]["per_fold"], strict=True):
+        assert new["train_rows"] == old["train_rows"] and new["valid_rows"] == old["valid_rows"]
+        assert new["roc_auc"] == pytest.approx(old["roc_auc"], abs=1e-6)
+        assert new["log_loss"] == pytest.approx(old["log_loss"], abs=1e-6)

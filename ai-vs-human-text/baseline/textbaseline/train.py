@@ -28,7 +28,7 @@ def train(data_dir: Path, out_dir: Path, min_df: int | None = None) -> dict:
     if test is not None:
         test["probability"] = pipe.predict_proba(test["text"])[:, 1]
         test[["id", "probability"]].to_csv(out_dir / "submission.csv", index=False)
-        info["submission"] = str(out_dir / "submission.csv")
+        info["submission"] = data.display_path(out_dir / "submission.csv")
         info["test_rows"] = int(len(test))
     (out_dir / "train_info.json").write_text(json.dumps(info, indent=2) + "\n")
     return info

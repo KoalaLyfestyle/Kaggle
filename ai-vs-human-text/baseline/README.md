@@ -39,6 +39,11 @@ Data comes from `../data` by default. Use `--data-dir DIR` or set
   changed on purpose.
 - **Fitting.** The vectorizer and classifier are refitted inside each fold on
   the training folds only. A test checks this.
+- **Vocabulary.** The 10,000 most frequent terms are kept, and ties at the
+  cutoff break alphabetically (`TopTermsTfidf`). Plain `TfidfVectorizer`
+  breaks them with an unstable sort, which made results differ between x86
+  and Apple silicon. A test reruns the evaluation and compares it with the
+  committed report.
 - **Which data.** The report records the SHA-256 of `train.csv` and says
   whether it is the committed competition file.
 - **Versions.** `requirements.lock` pins every package for Python 3.12.

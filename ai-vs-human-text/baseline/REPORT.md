@@ -2,7 +2,7 @@
 
 This compares the reproducible TF-IDF baseline in this folder with the best
 transformer experiment in the parent folder, `12_DeBERTa.ipynb`. Baseline
-numbers were rerun on 13 October 2026. DeBERTa numbers are historical: they
+numbers were rerun on 16 October 2026. DeBERTa numbers are historical: they
 come from `../comprehensive_model_comparison.csv` and `../kaggle_scores.csv`
 and were **not reproduced** here (the notebook needs a GPU and a Colab drive
 layout).
@@ -43,8 +43,10 @@ and an ungrouped StratifiedKFold. Copies of the same text then land in both
 training and validation folds, which inflates CV. The effect is visible:
 removing duplicates lowers the TF-IDF CV from 0.9940 to 0.9923 and DeBERTa
 from 0.9994 to 0.9988. The baseline merges duplicates before splitting and
-keeps each near-duplicate group in one fold. Paraphrases that change the
-opening can still cross folds; nothing here detects them.
+keeps each near-duplicate group in one fold. Copies with a heading or other
+text added at the start, and paraphrases, can still cross folds: 27 pairs of
+human texts with word 5-gram Jaccard similarity of 0.8 or more sit in
+different folds, which moves ROC-AUC by about 1e-4.
 
 **Train and test overlap.** 212 test rows (166 unique texts, 18% of the 1,178
 test rows) appear verbatim in the training data, all labelled human there;
@@ -76,9 +78,9 @@ exactly. The baseline uses the untuned settings on purpose.
 ## Error examples
 
 From `reports/tfidf-logreg/report.json`, out-of-fold at a 0.5 threshold:
-240 errors, 197 of them AI texts scored as human (one example per near-duplicate group).
+242 errors, 198 of them AI texts scored as human (one example per near-duplicate group).
 
-- AI scored as human (p = 0.16): "External service features are identified
+- AI scored as human (p = 0.15): "External service features are identified
   by querying various third-party services and search engines ..."
 - AI scored as human (p = 0.17): "A strong linear relationship was observed
   between sheet count and speed loss, as reflected by an R-squared value of
@@ -100,7 +102,7 @@ human text gets flagged. See `MODEL_CARD.md`.
 - Even the deduplicated historical runs used notebook-specific folds, so the
   comparison with the baseline is close but not exact.
 - The near-duplicate rule (same first 100 normalised characters) is a
-  heuristic. It misses paraphrases and may group unrelated texts that share
+  heuristic. It misses copies with text added at the start and paraphrases, and may group unrelated texts that share
   a boilerplate opening; grouping too much only makes CV stricter.
 - The data has no recorded source or licence in this repository.
 - No ensemble or search was run, by design.

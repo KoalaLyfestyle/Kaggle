@@ -49,7 +49,7 @@ def evaluate(
     train = data.load_train(data_dir)
     test = data.load_test(data_dir)
     frame = train.frame.copy()
-    frame["fold"] = data.read_folds(splits_path, frame)
+    frame["fold"] = data.read_folds(splits_path, frame, train.checks["is_competition_data"])
 
     folds = sorted(frame["fold"].unique())
     oof = np.full(len(frame), np.nan)
@@ -115,7 +115,8 @@ def evaluate(
         "split": {
             "method": (
                 f"stratified {len(folds)}-fold over unique texts, near-duplicate groups kept in one fold "
-                f"(duplicates merged on lowercase letters and digits; groups share the first "
+                f"(duplicates merged on letters and digits in any script, case-folded after NFKC; "
+                f"groups share the first "
                 f"{data.GROUP_PREFIX_CHARS} such characters)"
             ),
             "manifest": data.display_path(splits_path),

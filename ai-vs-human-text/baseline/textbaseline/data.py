@@ -172,7 +172,7 @@ def make_folds(frame: pd.DataFrame, n_folds: int = 5, seed: int = 42) -> pd.Data
     )
 
 
-def read_folds(path: Path, frame: pd.DataFrame) -> pd.Series:
+def read_folds(path: Path, frame: pd.DataFrame, is_competition_data: bool = True) -> pd.Series:
     """Fold per row of frame, from a committed manifest. Fails if they do not match."""
     manifest = pd.read_csv(path, dtype={"text_id": str, "group_id": str})
     if not {"text_id", "label", "fold"} <= set(manifest.columns):
@@ -183,10 +183,19 @@ def read_folds(path: Path, frame: pd.DataFrame) -> pd.Series:
     missing = set(frame["text_id"]) - set(by_id.index)
     extra = set(by_id.index) - set(frame["text_id"])
     if missing or extra:
+        if is_competition_data:
+            fix = "Regenerate it with `python -m textbaseline make-splits --force` only if the data changed on purpose."
+        else:
+            # Never point at --force here: it would overwrite the committed
+            # competition folds with folds for other data.
+            fix = (
+                "This is not the committed competition data, so it needs its own fold file: "
+                "`python -m textbaseline make-splits --data-dir <dir> --splits <new path>`, "
+                "then pass the same `--splits <new path>` to evaluate."
+            )
         raise DataError(
             f"{path} does not match the training data: {len(missing)} texts have no fold, "
-            f"{len(extra)} folds have no text. Regenerate it with `python -m textbaseline make-splits --force` "
-            f"only if the data changed on purpose."
+            f"{len(extra)} folds have no text. {fix}"
         )
     labels = by_id.loc[frame["text_id"], "label"].to_numpy()
     if not np.array_equal(labels, frame["label"].to_numpy()):

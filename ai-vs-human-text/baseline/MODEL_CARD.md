@@ -33,11 +33,11 @@ No competition leaderboard score was produced for this exact run.
 
 ## Expected failure modes
 
-- **AI text written in a plain, specific style is missed.** Most errors (197
-  of 240) are AI texts scored as human. The most confident misses describe
+- **AI text written in a plain, specific style is missed.** Most errors (198
+  of 242) are AI texts scored as human. The most confident misses describe
   concrete steps, numbers, or tools ("we generated image embeddings using
   ResNet50 ..."). The model keys on generic phrasing, not on authorship.
-- **Polished human writing is flagged.** The 43 false positives are human
+- **Polished human writing is flagged.** The 44 false positives are human
   texts with formal connectives ("comprehensive", "enhance", "Firstly ...").
   Careful non-native or edited writing is at risk.
 - **Probabilities are not calibrated.** Log loss is 0.25 against ROC-AUC
