@@ -5,6 +5,8 @@
 **Primary Metric**: ROC-AUC  
 **Final Performance**: 0.99964 ROC-AUC (DeBERTa-v3)
 
+**Reproducible baseline**: [`baseline/`](baseline/) reruns a TF-IDF + logistic regression model on fixed folds in seconds on a CPU. It also has a [comparison with DeBERTa](baseline/REPORT.md) that covers duplicates, train/test overlap, and leaderboard use, plus a [model card](baseline/MODEL_CARD.md). The notebooks below are exploratory records.
+
 ---
 
 ## Table of Contents

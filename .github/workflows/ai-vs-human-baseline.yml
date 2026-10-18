@@ -1,0 +1,37 @@
+name: ai-vs-human baseline
+
+on:
+  push:
+    paths:
+      - "ai-vs-human-text/baseline/**"
+      - "ai-vs-human-text/data/**"
+      - ".github/workflows/ai-vs-human-baseline.yml"
+  pull_request:
+    paths:
+      - "ai-vs-human-text/baseline/**"
+      - "ai-vs-human-text/data/**"
+      - ".github/workflows/ai-vs-human-baseline.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ai-vs-human-text/baseline
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.lock
+      - name: Smoke tests on the synthetic fixture
+        run: python -m pytest -q
+      - name: Evaluate on the fixture
+        run: |
+          python -m textbaseline make-splits --data-dir tests/fixtures/data --splits runs/fixture-folds.csv
+          python -m textbaseline evaluate --data-dir tests/fixtures/data --splits runs/fixture-folds.csv \
+            --min-df 1 --out runs/fixture
+          cat runs/fixture/report.md
