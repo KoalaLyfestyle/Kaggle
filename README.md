@@ -52,7 +52,7 @@ python -m textbaseline train     # fit on all texts, write a submission
 Expected output:
 
 ```text
-22 passed in 13.41s
+22 passed in ...s
 ROC-AUC 0.9915 ± 0.0018; report: .../baseline/runs/evaluate/report.json
 model: .../baseline/runs/train/model.joblib; vocabulary 10000
 submission: baseline/runs/train/submission.csv (1178 rows)
@@ -137,7 +137,8 @@ notebook's Colab layout, so its numbers stay labelled historical.
 
 Winston Ho built both competition projects: the notebooks, feature
 engineering, models, write-ups, and the academic reports in each folder's
-`report.pdf`. The course provided the data and the competitions. The
+`report.pdf`. The course provided the data and the competitions (the data's source and
+licence are not recorded here). The
 reproducible baseline in `ai-vs-human-text/baseline/` was added in
 October 2026 by an AI coding agent working from Winston's issues, and he
 reviewed it and checked it on his Mac before merging.

@@ -50,11 +50,13 @@ expect the transformer notebooks to need a GPU.
 
 ## Notes
 
-- Model weights and generated artifacts are not committed.
+- Model weights are not committed. Submission files and the comparison CSVs
+  are.
 - Each project folder has the academic report submitted for grading
   (`report.pdf`).
 - Notebook folds were drawn per notebook with `StratifiedKFold(5,
-  shuffle=True, random_state=42)` on whichever data version it loaded, and
-  the Optuna studies have no sampler seed. Tuned results cannot be
-  reproduced exactly. See
+  shuffle=True, random_state=42)` on whichever data version it loaded. The
+  AI-text Optuna studies in notebooks 1 to 5 have no sampler seed, so those
+  tuned results cannot be reproduced exactly. The bot detection studies use
+  `TPESampler(seed=42)`. See
   [the baseline report](../ai-vs-human-text/baseline/REPORT.md#checks).

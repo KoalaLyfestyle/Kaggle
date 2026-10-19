@@ -12,7 +12,11 @@ Inputs (all committed):
 
 Rows left out: the stacked ensemble with no CV score, the weighted-average
 ensemble (its CV has no fold spread), and Optuna rows whose scores are
-identical to the untuned row of the same model.
+identical to the untuned row of the same model. Rows the CSV marks as
+tuned are labelled "(tuned)". Error bars are cut at 1.0.
+
+Needs pandas and matplotlib (the committed images were drawn with
+matplotlib 3.11.2): `pip install matplotlib==3.11.2 pandas`.
 
 Outputs: docs/media/cv-results-light.png and cv-results-dark.png.
 """
@@ -55,6 +59,8 @@ def load() -> tuple[pd.DataFrame, dict]:
     d = d[d["cv_roc_auc"].notna() & (d["cv_roc_auc_std"] > 0)]
     d = d[~d["display_name"].str.contains("Optuna")]
     d = d.assign(name=d["display_name"].replace(NAMES))
+    tuned = d["optimized"].astype(str).isin(["True", "T"])
+    d.loc[tuned, "name"] = d.loc[tuned, "name"] + " (tuned)"
     rerun = json.loads(REPORT.read_text())["metrics"]["mean_std"]["roc_auc"]
     return d, rerun
 
@@ -74,7 +80,9 @@ def draw(d: pd.DataFrame, rerun: dict, theme: str) -> Path:
         ("deduplicated", c["dedup"], "s", -0.15, "Notebook run, deduplicated data"),
     ]:
         rows = d[d["data_version"] == version]
-        ax.errorbar(rows["cv_roc_auc"], [y[n] + dy for n in rows["name"]], xerr=rows["cv_roc_auc_std"],
+        # ROC-AUC cannot exceed 1, so the upper bar stops there.
+        upper = (1.0 - rows["cv_roc_auc"]).clip(upper=rows["cv_roc_auc_std"])
+        ax.errorbar(rows["cv_roc_auc"], [y[n] + dy for n in rows["name"]], xerr=[rows["cv_roc_auc_std"], upper],
                     fmt=marker, color=colour, ecolor=colour, elinewidth=1.6, capsize=3, markersize=6, label=label)
     ax.errorbar([rerun["mean"]], [y[rerun_label]], xerr=[rerun["std"]], fmt="D", color=c["rerun"],
                 ecolor=c["rerun"], elinewidth=1.8, capsize=3, markersize=7,
@@ -95,7 +103,7 @@ def draw(d: pd.DataFrame, rerun: dict, theme: str) -> Path:
     leg = ax.legend(loc="upper left", frameon=False, fontsize=8.5)
     for t in leg.get_texts():
         t.set_color(c["fg"])
-    fig.text(0.01, 0.01, "Notebook runs are historical and were not rerun. Higher is better; folds differ between rows.",
+    fig.text(0.01, 0.01, "Notebook runs are historical and were not rerun. The rerun sits next to its notebook row. Folds differ between rows.",
              color=c["muted"], fontsize=8)
     fig.tight_layout(rect=(0, 0.03, 1, 1))
     path = OUT / f"cv-results-{theme}.png"
