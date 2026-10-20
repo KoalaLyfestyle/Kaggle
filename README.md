@@ -13,12 +13,14 @@ about a minute on a laptop CPU.
 - Rerun a TF-IDF and logistic regression baseline for AI-vs-human text on
   fixed 5-fold splits and get the same scores, fold by fold
   (`python -m textbaseline evaluate`).
-- Merge duplicate texts and keep near-duplicates in one fold, so copies of a
-  text cannot sit in both training and validation. The evaluation refuses to
-  run if the folds do not match the data.
-- Write a JSON and Markdown report with per-fold metrics, error examples, the
-  data's SHA-256, and the package versions; `train` writes a Kaggle
-  submission file.
+- Merge duplicate texts and keep near-duplicates in one fold: exact copies,
+  and copies that share their first 100 normalised characters, stay in one
+  fold. Copies with text added at the start can still cross folds (27 pairs,
+  about 1e-4 ROC-AUC; see the [baseline report](ai-vs-human-text/baseline/REPORT.md)).
+  The evaluation refuses to run if the folds do not match the data.
+- Write a report: `report.json` holds the per-fold metrics, the data's
+  SHA-256, and the package versions; `report.md` has the mean ± std, data
+  counts, and error examples. `train` writes a Kaggle submission file.
 - Browse the competition notebooks: 12 model variants from TF-IDF to
   DeBERTa-v3 for AI text, and gradient boosting, MLPs, and ensembles for bot
   detection.
@@ -35,8 +37,8 @@ per notebook, so treat small gaps between rows as noise. The chart comes from
 
 ## Quickstart
 
-Needs Python 3.12 and git. No GPU, downloads, or API keys: the competition
-data is in the repository.
+Needs Python 3.12 and git. No GPU, dataset download, or API keys: the
+competition data is in the repository.
 
 ```bash
 git clone https://github.com/KoalaLyfestyle/Kaggle.git
@@ -44,7 +46,7 @@ cd Kaggle/ai-vs-human-text/baseline
 python3.12 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.lock
 
-python -m pytest -q              # smoke tests on a synthetic 81-text fixture
+python -m pytest -q              # fixture smoke tests, plus a rerun checked against the committed report
 python -m textbaseline evaluate  # 5-fold CV on the committed training data
 python -m textbaseline train     # fit on all texts, write a submission
 ```
@@ -58,9 +60,9 @@ model: .../baseline/runs/train/model.joblib; vocabulary 10000
 submission: baseline/runs/train/submission.csv (1178 rows)
 ```
 
-The fold scores in `runs/evaluate/report.json` match the committed
+In `runs/evaluate/report.json`, ROC-AUC matches the committed
 [`reports/tfidf-logreg/report.json`](ai-vs-human-text/baseline/reports/tfidf-logreg/report.json)
-exactly. More options are in the [baseline README](ai-vs-human-text/baseline/README.md).
+exactly on every fold, and the other metrics match to within 1e-6. More options are in the [baseline README](ai-vs-human-text/baseline/README.md).
 
 ## How it works
 
@@ -68,6 +70,7 @@ exactly. More options are in the [baseline README](ai-vs-human-text/baseline/REA
 flowchart LR
     csv["data/train.csv, test.csv"] --> data["data.py<br/>normalise, merge duplicates,<br/>group near-duplicates"]
     data --> folds["splits/folds.csv<br/>fixed 5 folds"]
+    data --> eval
     folds --> eval["evaluate.py<br/>refit per fold"]
     model["model.py<br/>TopTermsTfidf + LogisticRegression"] --> eval
     model --> train["train.py"]
@@ -78,8 +81,10 @@ flowchart LR
 ```
 
 The package `ai-vs-human-text/baseline/textbaseline/` reads the training
-texts and gives each one an ID from its normalised form, so exact copies merge
-and texts with the same opening 100 characters form a group. The fold file
+texts and gives each one an ID from its normalised form: letters and digits
+in any script, after NFKC, case-folded. So copies that differ only in case,
+spacing, or punctuation merge, copies with conflicting labels are dropped,
+and texts whose normalised form shares its first 100 characters form a group. The fold file
 assigns every text and group to one of five folds and is checked against the
 data before each run. For each fold, the vectorizer and classifier are fitted
 on the other four folds only, and a test checks that no validation text
@@ -133,19 +138,11 @@ the committed report, so a result in this README can be checked, not trusted.
 **What was cut:** rerunning DeBERTa on the fixed folds. It needs a GPU and the
 notebook's Colab layout, so its numbers stay labelled historical.
 
-## Who built what
-
-Winston Ho built both competition projects: the notebooks, feature
-engineering, models, write-ups, and the academic reports in each folder's
-`report.pdf`. The course provided the data and the competitions (the data's source and
-licence are not recorded here). The
-reproducible baseline in `ai-vs-human-text/baseline/` was added in
-October 2026 by an AI coding agent working from Winston's issues, and he
-reviewed it and checked it on his Mac before merging.
-
 ## More
 
 - [The competition notebooks](docs/notebooks.md): what each one does and how
   to open them.
 - [twitter-bot-detection/README.md](twitter-bot-detection/README.md) and
   [ai-vs-human-text/README.md](ai-vs-human-text/README.md): full write-ups.
+
+If this is useful to you, a star or a fork is appreciated.

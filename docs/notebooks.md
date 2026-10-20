@@ -50,8 +50,9 @@ expect the transformer notebooks to need a GPU.
 
 ## Notes
 
-- Model weights are not committed. Submission files and the comparison CSVs
-  are.
+- Model weights are not committed. The comparison CSVs are, and so are the
+  bot detection submission files. The AI-text project has no committed
+  submissions.
 - Each project folder has the academic report submitted for grading
   (`report.pdf`).
 - Notebook folds were drawn per notebook with `StratifiedKFold(5,
